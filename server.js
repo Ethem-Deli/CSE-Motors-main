@@ -115,15 +115,19 @@ app.use(async (req, res, next) => {
  * Placed after all other middleware
  *************************/
 app.use(async (err, req, res, next) => {
-  let nav =  "";
+  // FIXED NAV (Previously was empty string, causing home to break)
+  const nav = await utilities.getNav();
+
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
   console.dir(err);
+
   let message =
     err.status == 404
       ? err.message
       : "Oh no! There was a crash. Maybe try a different route?";
-  res.render("errors/error", {
-    title: err.status || "Server Error",
+
+  res.status(err.status || 500).render("errors/error", {
+    title: err.status == 404 ? "404 Not Found" : "Server Error",
     message,
     nav,
   });
