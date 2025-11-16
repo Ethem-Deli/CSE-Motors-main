@@ -115,7 +115,7 @@ app.use(async (req, res, next) => {
  * Placed after all other middleware
  *************************/
 app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav();
+  let nav =  "";
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
   console.dir(err);
   let message =

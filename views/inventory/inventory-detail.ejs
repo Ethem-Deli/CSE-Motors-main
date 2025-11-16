@@ -1,0 +1,128 @@
+
+<!-- views/inventory/inventory-detail.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        <%= title %>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        /* Minimal styling you can place in your CSS file instead */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .vehicle-row {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .vehicle-image {
+            flex: 1 1 420px;
+            min-width: 280px;
+        }
+
+        .vehicle-info {
+            flex: 1 1 360px;
+            min-width: 260px;
+        }
+
+        .vehicle-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        @media (max-width:720px) {
+            .vehicle-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- optional nav partial include -->
+        <% /* include('../partials/header') */ %>
+    </header>
+
+    <main class="container" role="main">
+        <article>
+            <h1>
+                <%= (vehicle.year || '' ) + ' ' + (vehicle.make || vehicle.inv_make || '' ) + ' ' + (vehicle.model ||
+                    vehicle.inv_model || '' ) %>
+            </h1>
+
+            <div class="vehicle-row" aria-labelledby="veh-heading">
+                <div class="vehicle-image">
+                    <% const img=vehicle.image_full || vehicle.inv_image || vehicle.image || vehicle.thumbnail || '' ;
+                        %>
+                        <img src="<%= img %>" alt="<%= title %>" />
+                </div>
+
+                <div class="vehicle-info">
+                    <p style="font-size:1.5rem;font-weight:700;margin:0.25rem 0;">
+                        <%= utilities.formatMoney(vehicle.price || vehicle.inv_price) %>
+                    </p>
+                    <p style="margin:0.25rem 0;">
+                        Mileage: <strong>
+                            <%= utilities.formatNumber(vehicle.mileage || vehicle.inv_miles || vehicle.miles) %> miles
+                        </strong>
+                    </p>
+
+                    <section aria-label="Vehicle description" style="margin-top:1rem;">
+                        <h2 style="font-size:1rem;margin-bottom:.25rem;">Description</h2>
+                        <p>
+                            <%= vehicle.description || vehicle.inv_description || 'No description available.' %>
+                        </p>
+                    </section>
+
+                    <section aria-label="Specifications" style="margin-top:1rem;">
+                        <h3 style="font-size:1rem;margin-bottom:.25rem;">Specifications</h3>
+                        <ul>
+                            <% if (vehicle.color) { %>
+                                <li><strong>Color:</strong>
+                                    <%= vehicle.color %>
+                                </li>
+                                <% } %>
+                                    <% if (vehicle.transmission) { %>
+                                        <li><strong>Transmission:</strong>
+                                            <%= vehicle.transmission %>
+                                        </li>
+                                        <% } %>
+                                            <% if (vehicle.fuel) { %>
+                                                <li><strong>Fuel:</strong>
+                                                    <%= vehicle.fuel %>
+                                                </li>
+                                                <% } %>
+                                                    <% if (vehicle.body_style) { %>
+                                                        <li><strong>Body style:</strong>
+                                                            <%= vehicle.body_style %>
+                                                        </li>
+                                                        <% } %>
+                        </ul>
+                    </section>
+
+                    <p style="margin-top:1rem;">
+                        <a href="/inventory">Back to inventory</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <% /* include('../partials/footer') */ %>
+    </footer>
+</body>
+
+</html>

@@ -1,16 +1,19 @@
-// Needed resources
 const express = require("express");
-const router = new express.Router();
+const router = express.Router();
 const intentionalErrorController = require("../controllers/intentionalErrorController");
 const utilities = require("../utilities");
 
-// Middleware causes an error
+// Optional middleware causing error
 router.use("/", utilities.handleErrors(async (req, res, next) => {
-    // throw new Error("Middleware intentionally throwing an exception") // Comment this line to allow controller to cause the error
+    // You may uncomment this to test middleware errors:
+    // throw new Error("Middleware intentionally throwing an exception");
     next();
 }));
 
-// Route to cause 500 type error
+// Route 1: /ierror → causes default 500
 router.get("/", utilities.handleErrors(intentionalErrorController.causeError));
+
+// Route 2: /ierror/trigger-error → throws test error
+router.get("/trigger-error", utilities.handleErrors(intentionalErrorController.throwError));
 
 module.exports = router;
