@@ -37,7 +37,6 @@ async function getInventoryByClassificationId(classification_id) {
     return data.rows;
   } catch (error) {
     console.error("getclassificationsbyid error " + error);
-    throw error;
   }
 }
 
@@ -53,11 +52,9 @@ async function getInventoryByInventoryId(inventoryId) {
         WHERE inv_id = $1`,
       [inventoryId]
     );
-    // Return a single row (object) instead of an array: easier for controllers
-    return data.rows[0];
+    return data.rows;
   } catch (error) {
-    console.error("getInventoryByInventoryId error " + error);
-    throw error;
+    console.error("getInventoryByInventoryId error" + error);
   }
 }
 
@@ -103,7 +100,6 @@ async function addInventory(
     ]);
   } catch (error) {
     console.error("editInventory error. " + error);
-    throw error;
   }
 }
 
@@ -143,7 +139,6 @@ async function updateInventory(
     ).rows[0];
   } catch (error) {
     console.error("addInventory error. " + error);
-    throw error;
   }
 }
 
@@ -151,12 +146,11 @@ async function updateInventory(
  * Delete Inventory Data
  *******************************/
 async function deleteInventory(inv_id) {
-  const sql = "DELETE FROM public.inventory WHERE inv_id = $1";
+  const sql = "DELETE FROM inventory WHERE inv_id = $1";
   try {
     return await pool.query(sql, [inv_id]);
   } catch (error) {
     console.error("deleteInventory error. " + error);
-    throw error;
   }
 }
 

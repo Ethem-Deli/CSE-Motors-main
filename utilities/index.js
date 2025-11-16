@@ -17,6 +17,7 @@ const Util = {};
 * @property {boolean} message_archived
 */
 
+
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
@@ -98,56 +99,37 @@ Util.buildClassificationGrid = async function (data) {
  */
 Util.buildItemListing = async function (data) {
   let listingHTML = "";
-  // allow either an object or an array (existing controllers sometimes pass data[0])
-  if (Array.isArray(data) && data.length > 0) data = data[0];
-
-  // debug-friendly output without revealing internals
   console.dir({ data });
-
-  if (data && typeof data === "object") {
-    // Safe defaults if any field is missing
-    const image = data.inv_image || "/images/site/no-image.png";
-    const make = data.inv_make || "";
-    const model = data.inv_model || "";
-    const year = data.inv_year || "";
-    const price =
-      data.inv_price !== undefined && data.inv_price !== null
-        ? Number.parseFloat(data.inv_price).toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })
-        : "N/A";
-    const miles =
-      data.inv_miles !== undefined && data.inv_miles !== null
-        ? Number.parseInt(data.inv_miles, 10).toLocaleString("en-US")
-        : "N/A";
-    const description = data.inv_description || "No description available.";
-    const color = data.inv_color || "N/A";
-    const classification = data.classification_name || "N/A";
-
+  if (data) {
     listingHTML = `
       <section class="car-listing">
-        <div class="car-image">
-          <img src="${image}" alt="${make} ${model}" />
-        </div>
-
+        <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
         <div class="car-information">
-          <div class="car-title">
-            <h2>${year} ${make} ${model}</h2>
-            <div class="car-price">${price}</div>
+          <div>
+            <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
           </div>
-
+          <div>
+            ${Number.parseFloat(data.inv_price).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}
+          </div>
           <div class="description">
-            <p>${description}</p>
+            <p>
+              ${data.inv_description}
+            </p>
             <dl>
               <dt>MILEAGE</dt>
-              <dd>${miles}</dd>
+              <dd>${data.inv_miles.toLocaleString("en-US", {
+                style: "decimal",
+              })}</dd>
               <dt>COLOR</dt>
-              <dd>${color}</dd>
+              <dd>${data.inv_color}</dd>
               <dt>CLASS</dt>
-              <dd>${classification}</dd>
+              <dd>${data.classification_name}</dd>
             </dl>
           </div>
+
         </div>
       </section>
     `;
