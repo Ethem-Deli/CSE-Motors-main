@@ -1,4 +1,4 @@
-const pool = require("../database/");
+const pool = require("../database");
 
 /* ***************************
  *  Get all classification data
@@ -10,7 +10,6 @@ async function getClassifications() {
 }
 
 async function addClassification(classification_name) {
-  // ..for insertion to the database.
   const sql = `INSERT INTO public.classification (classification_name) 
     VALUES ($1)`;
 
@@ -33,7 +32,7 @@ async function getInventoryByClassificationId(classification_id) {
         WHERE i.classification_id = $1`,
       [classification_id]
     );
- 
+
     return data.rows;
   } catch (error) {
     console.error("getclassificationsbyid error " + error);
@@ -161,5 +160,5 @@ module.exports = {
   addClassification,
   addInventory,
   updateInventory,
-  deleteInventory
+  deleteInventory,
 };

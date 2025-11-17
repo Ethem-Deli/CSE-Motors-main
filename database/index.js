@@ -1,18 +1,26 @@
-const { Pool } = require("pg");
+/********************************************
+ * PostgreSQL Pool Connection File
+ * Works for BOTH local development and Render
+ ********************************************/
 require("dotenv").config();
+const { Pool } = require("pg");
 
 let pool;
 
+/**
+ * In production (Render)
+ * - Use DATABASE_URL
+ * - Enable SSL
+ */
 if (process.env.NODE_ENV === "production") {
-  // Render production database
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   });
 } else {
-  // Local database
+  /** Development (local machine) */
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
   });

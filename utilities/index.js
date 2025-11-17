@@ -133,7 +133,6 @@ Util.buildItemListing = async function (data) {
         </div>
       </section>
     `;
-    // listingHTML += '<img src="/images/notexist.jpg">'; // Introduce 404 error
   } else {
     listingHTML = `
       <p>Sorry, no matching vehicles could be found.</p>
@@ -270,7 +269,7 @@ Util.checkAuthorizationManager = (req, res, next) => {
  * @returns 
  */
 Util.buildInbox = (messages) => {
-  inboxList = `
+  let inboxList = `
   <table>
     <thead>
       <tr>

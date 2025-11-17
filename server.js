@@ -15,7 +15,6 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 require("dotenv").config(); //  Ensure environment variables are loaded
 
-
 // My stuff
 const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
@@ -41,15 +40,15 @@ const app = express();
 app.use(
   session({
     store: new pgSession({
-      pool: pool.pool || pool, //  Support both export styles
-      tableName: "session", // table name in PostgreSQL
+      pool: pool, // fixed reference
+      tableName: "session",
       createTableIfMissing: true,
     }),
-    secret: process.env.SESSION_SECRET || "default-secret-key", //  fallback secret
+    secret: process.env.SESSION_SECRET || "default-secret-key",
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: process.env.NODE_ENV === "production", // secure only in production
+      secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 2, // 2 hours
     },
   })
@@ -66,7 +65,7 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
-    extended: true, // for parsing application/x-www-form-urlencoded
+    extended: true,
   })
 );
 
@@ -81,7 +80,7 @@ app.use(utilities.checkJWTToken);
  *************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
-app.set("layout", "./layouts/layout"); // Not at view root
+app.set("layout", "./layouts/layout");
 
 /* ***********************
  * Routes
@@ -113,7 +112,6 @@ app.use(async (req, res, next) => {
 
 /* ***********************
  * Express Error Handler
- * Placed after all other middleware
  *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
@@ -132,10 +130,9 @@ app.use(async (err, req, res, next) => {
 
 /* ***********************
  * Local Server Information
- * Values from .env (environment) file
  *************************/
-const port = process.env.PORT || 3000 //  Render provides this automatically
-const host = process.env.HOST || "0.0.0.0"; //  Use 0.0.0.0 for Render
+const port = process.env.PORT || 3000; // FIXED FOR RENDER
+const host = process.env.HOST || "0.0.0.0";
 
 /* ***********************
  * Log statement to confirm server operation
