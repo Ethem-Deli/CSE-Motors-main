@@ -15,6 +15,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 require("dotenv").config(); //  Ensure environment variables are loaded
 
+
 // My stuff
 const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
@@ -133,7 +134,7 @@ app.use(async (err, req, res, next) => {
  * Local Server Information
  * Values from .env (environment) file
  *************************/
-const port = process.env.PORT || 5432; //  Render provides this automatically
+const port = process.env.PORT || 3000 //  Render provides this automatically
 const host = process.env.HOST || "0.0.0.0"; //  Use 0.0.0.0 for Render
 
 /* ***********************
