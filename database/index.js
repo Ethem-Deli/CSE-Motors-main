@@ -1,14 +1,21 @@
 const { Pool } = require("pg");
 require("dotenv").config();
 
-/* ***************
- * Connection Pool
- * Works both locally and in production
- * *************** */
+let pool;
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-});
+if (process.env.NODE_ENV === "production") {
+  // Render production database
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
+} else {
+  // Local database
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+}
 
 module.exports = pool;
