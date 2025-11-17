@@ -56,6 +56,18 @@ async function getInventoryByInventoryId(inventoryId) {
     console.error("getInventoryByInventoryId error" + error);
   }
 }
+async function getVehicleById(inv_id) {
+  try {
+    const sql = `
+      SELECT * FROM inventory
+      WHERE inv_id = $1
+    `;
+    const data = await pool.query(sql, [inv_id]);
+    return data.rows[0];
+  } catch (error) {
+    console.error("getVehicleById error:", error);
+  }
+}
 
 /*******************************
  * Add a single inventory item
@@ -157,6 +169,7 @@ module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getInventoryByInventoryId,
+  getVehicleById,
   addClassification,
   addInventory,
   updateInventory,

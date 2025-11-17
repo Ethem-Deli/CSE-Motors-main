@@ -516,3 +516,42 @@ table thead tr th {
   }
 
 }
+.vehicle-detail-container {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.vehicle-image {
+  flex: 1 1 400px;
+}
+
+.vehicle-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.vehicle-info {
+  flex: 1 1 400px;
+}
+
+.vehicle-info h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 1.8rem;
+  color: #0b6efd;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Small screens: stack columns */
+@media (max-width: 768px) {
+  .vehicle-detail-container {
+    flex-direction: column;
+  }
+}

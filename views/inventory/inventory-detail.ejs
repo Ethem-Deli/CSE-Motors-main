@@ -52,7 +52,7 @@
 <body>
     <header>
         <!-- optional nav partial include -->
-        <% /* include('../partials/header') */ %>
+        <%include('../partials/header')%>
     </header>
 
     <main class="container" role="main">
@@ -118,10 +118,11 @@
                 </div>
             </div>
         </article>
+        <%- vehicleDetail %>
     </main>
 
     <footer>
-        <% /* include('../partials/footer') */ %>
+        <% include('../partials/footer')  %>
     </footer>
 </body>
 

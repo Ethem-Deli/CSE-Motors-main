@@ -26,7 +26,7 @@ const utilities = require("./utilities/index.js");
 const pool = require("./database"); // PostgreSQL pool connection
 
 // Init
-const app = express();
+const app = express();  
 
 /* ***********************
  * Middleware
@@ -131,8 +131,8 @@ app.use(async (err, req, res, next) => {
 /* ***********************
  * Local Server Information
  *************************/
-const port = process.env.PORT || 3000; // FIXED FOR RENDER
-const host = process.env.HOST || "0.0.0.0";
+const port = process.env.PORT || 3000;
+const host = process.env.HOST || "localhost"; // or "0.0.0.0" for Render
 
 /* ***********************
  * Log statement to confirm server operation

@@ -6,11 +6,18 @@ const accountController = require("../controllers/accountController");
 const utilities = require("../utilities");
 const regValidate = require("../utilities/account-validation");
 
-
-router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManagementView));
+// Build account management view
+router.get(
+  "/",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildAccountManagementView)
+);
 
 // Route to build account view
-router.get("/login", utilities.handleErrors(accountController.buildLogin));
+router.get(
+  "/login",
+  utilities.handleErrors(accountController.buildLogin)
+);
 router.post(
   "/login",
   regValidate.loginRules(),
@@ -19,10 +26,16 @@ router.post(
 );
 
 // Route to logout
-router.get("/logout", utilities.handleErrors(accountController.accountLogout));
+router.get(
+  "/logout",
+  utilities.handleErrors(accountController.accountLogout)
+);
 
 // Registration handlers
-router.get("/registration", utilities.handleErrors(accountController.buildRegister));
+router.get(
+  "/registration",
+  utilities.handleErrors(accountController.buildRegister)
+);
 router.post(
   "/register",
   regValidate.registrationRules(),
@@ -31,19 +44,21 @@ router.post(
 );
 
 // Update account handlers
-router.get("/update/:accountId", utilities.handleErrors(accountController.buildUpdate));
+router.get(
+  "/update/:accountId",
+  utilities.handleErrors(accountController.buildUpdate)
+);
 router.post(
   "/update",
   regValidate.updateRules(), // TODO: This needs to have a separate rule set, without existing email check..unless...oh complex
   regValidate.checkUpdateData,
   utilities.handleErrors(accountController.updateAccount)
-  );
+);
 router.post(
   "/update-password",
   regValidate.updatePasswordRules(),
   regValidate.checkUpdatePasswordData,
   utilities.handleErrors(accountController.updatePassword)
 );
-
 
 module.exports = router;

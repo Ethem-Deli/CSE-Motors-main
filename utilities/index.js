@@ -203,7 +203,6 @@ Util.checkJWTToken = (req, res, next) => {
  * @param {object} accountData
  * @param {import("express").Response} res
  */
-
 Util.updateCookie = (accountData, res) => {
   const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: 3600,
@@ -262,7 +261,6 @@ Util.checkAuthorizationManager = (req, res, next) => {
   }
 };
 
-
 /**
  * Build an html table string from the message array
  * @param {Array<Message>} messages 
@@ -304,6 +302,40 @@ Util.buildRecipientList = (recipientData, preselected = null) => {
   list += "</select>"
 
   return list;
-
 };
+
+/**
+ * Build the vehicle detail HTML
+ */
+Util.buildVehicleDetailHTML = function (vehicle) {
+  const priceFormatted = vehicle.inv_price.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  const milesFormatted = vehicle.inv_miles.toLocaleString("en-US");
+
+  return `
+    <section class="vehicle-detail">
+      <div class="vehicle-detail-container">
+        
+        <div class="vehicle-image">
+          <img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">
+        </div>
+
+        <div class="vehicle-info">
+          <h1>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h1>
+
+          <h2 class="price">${priceFormatted}</h2>
+
+          <p><strong>Description:</strong> ${vehicle.inv_description}</p>
+          <p><strong>Color:</strong> ${vehicle.inv_color}</p>
+          <p><strong>Mileage:</strong> ${milesFormatted} miles</p>
+        </div>
+
+      </div>
+    </section>
+  `;
+};
+
 module.exports = Util;
