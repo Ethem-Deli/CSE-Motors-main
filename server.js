@@ -132,7 +132,8 @@ app.use(async (err, req, res, next) => {
  * Local Server Information
  *************************/
 const port = process.env.PORT || 3000;
-const host = process.env.HOST || "localhost"; // or "0.0.0.0" for Render
+const host = process.env.HOST || "0.0.0.0"; // uncomment this line before commint for Render
+//const host = process.env.HOST || "localhost"; // uncomment this line for local dev
 
 /* ***********************
  * Log statement to confirm server operation
