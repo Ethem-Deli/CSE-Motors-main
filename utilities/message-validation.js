@@ -3,9 +3,7 @@ const { body, validationResult } = require("express-validator");
 const accountModel = require("../models/account-model");
 const validate = {};
 
-/* **********************************
- *  Send Message Data Validation Rules
- * ********************************* */
+/* Send Message Data Validation Rules*/
 validate.sendMessageRules = () => {
   return [
     // Make sure there is a recipient selected
@@ -33,9 +31,7 @@ validate.sendMessageRules = () => {
   ];
 };
 
-/* ******************************
- * Check data and return errors or continue to inbox
- * ***************************** */
+/* Check data and return errors or continue to inbox */
 validate.checkMessageData = async (req, res, next) => {
     const { message_to, message_subject, message_body } = req.body;
     let errors = [];

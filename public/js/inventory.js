@@ -1,10 +1,7 @@
-"use strict";
-
 // Get a list of items in inventory based on the classification_id
 let classificationList = document.querySelector("#classificationList");
 classificationList.addEventListener("change", listChange);
-listChange(); // Do it once on load.
-
+listChange();
 
 function listChange() {
     let classification_id = classificationList.value;
@@ -21,7 +18,7 @@ function listChange() {
         })
         .catch(function (error) {
             console.log("There was a problem: ", error.message);
-            document.getElementById("inventoryDisplay").innerHTML = "No vehicles in this category"; // Wanted something here
+            document.getElementById("inventoryDisplay").innerHTML = "No vehicles in this category";
         });
 }
 

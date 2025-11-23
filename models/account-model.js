@@ -1,8 +1,5 @@
 const pool = require("../database/");
-
-/* *****************************
- *   Register new account
- * *************************** */
+/*Register new account */
 async function registerAccount(
   account_firstname,
   account_lastname,
@@ -23,9 +20,7 @@ async function registerAccount(
   }
 }
 
-/* **********************
- *   Check for existing email
- * ********************* */
+/* Check for existing email */
 async function checkExistingEmail(account_email, excludedEmail = null) {
   try {
     if(excludedEmail) {
@@ -43,9 +38,7 @@ async function checkExistingEmail(account_email, excludedEmail = null) {
   }
 }
 
-/* *****************************
- * Return account data using email address
- * ***************************** */
+/* Return account data using email address */
 async function getAccountByEmail(account_email) {
   try {
     const result = await pool.query(
@@ -58,9 +51,7 @@ async function getAccountByEmail(account_email) {
   }
 }
 
-/* *****************************
- * Return account data using account id
- * ***************************** */
+/* Return account data using account id */
 async function getAccountById(account_id) {
   try {
     const result = await pool.query(
@@ -78,7 +69,7 @@ async function updateAccount(account_id, account_firstname, account_lastname, ac
   try{
     const sql = "UPDATE account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4"
     const result = await pool.query(sql, [account_firstname, account_lastname, account_email, account_id]);
-    return result; // TODO: See what the requirement wants
+    return result;
   } catch(error) {
     return new Error("Update failed");
   }
@@ -88,7 +79,7 @@ async function updatePassword(account_id, hashed_password) {
   try{
     const sql = "UPDATE account SET account_password = $1 WHERE account_id = $2"
     const result = await pool.query(sql, [hashed_password, account_id]);
-    return result; // TODO: See what the requirement wants
+    return result;
   } catch(error) {
     return new Error("Update password failed")
   }

@@ -18,9 +18,7 @@ const Util = {};
 */
 
 
-/* ************************
- * Constructs the nav HTML unordered list
- ************************** */
+/*Constructs the nav HTML unordered list */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
   let list = "<ul>";
@@ -41,9 +39,7 @@ Util.getNav = async function (req, res, next) {
   return list;
 };
 
-/* **************************************
- * Build the classification view HTML
- * ************************************ */
+/*Build the classification view HTMl */
 Util.buildClassificationGrid = async function (data) {
   let grid;
   if (data.length > 0) {
@@ -94,9 +90,7 @@ Util.buildClassificationGrid = async function (data) {
   return grid;
 };
 
-/**
- * Build a single listing element from data
- */
+/*Build a single listing element from data */
 Util.buildItemListing = async function (data) {
   let listingHTML = "";
   console.dir({ data });
@@ -166,17 +160,12 @@ Util.buildClassificationList = async function (classification_id = null) {
   return classificationList;
 };
 
-/* ****************************************
- * Middleware For Handling Errors
- * Wrap other function in this for
- * General Error Handling
- **************************************** */
+/* Middleware For Handling Errors, Wrap other function in this for
+ general Error Handling */
 Util.handleErrors = (fn) => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next);
 
-/* ****************************************
- * Middleware to check token validity
- **************************************** */
+/*Middleware to check token validity */
 Util.checkJWTToken = (req, res, next) => {
   if (req.cookies.jwt) {
     jwt.verify(
@@ -218,9 +207,7 @@ Util.updateCookie = (accountData, res) => {
   }
 };
 
-/* ****************************************
- *  Check Login
- * ************************************ */
+/* Check Login */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next();
@@ -230,9 +217,7 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
-/* ****************************************
- *  Check authorization
- * ************************************ */
+/*Check authorization*/
 Util.checkAuthorizationManager = (req, res, next) => {
   if (req.cookies.jwt) {
     jwt.verify(
@@ -304,9 +289,7 @@ Util.buildRecipientList = (recipientData, preselected = null) => {
   return list;
 };
 
-/**
- * Build the vehicle detail HTML
- */
+/** to build the vehicle detail HTML */
 Util.buildVehicleDetailHTML = function (vehicle) {
   const priceFormatted = vehicle.inv_price.toLocaleString("en-US", {
     style: "currency",

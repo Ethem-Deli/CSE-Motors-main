@@ -1,7 +1,5 @@
-// Needed Resources
 const express = require("express");
 const router = new express.Router();
-
 const messageController = require("../controllers/messageController");
 const messageValidation = require("../utilities/message-validation");
 const utilities = require("../utilities");

@@ -52,9 +52,7 @@ invCont.buildByInventoryId = async function (req, res, next) {
   });
 };
 
-/**
- * Build vehicle detail view (FIXED: now inside invCont!)
- */
+/* Build vehicle detail view */
 invCont.buildByInvId = async function (req, res, next) {
   try {
     const inv_id = parseInt(req.params.inv_id);
@@ -80,10 +78,7 @@ invCont.buildByInvId = async function (req, res, next) {
   }
 };
 
-/**********************************
- * Vehicle Management Controllers
- **********************************/
-
+/* Vehicle Management Controllers*/
 invCont.buildManagementView = async function (req, res, next) {
   let nav = await utilities.getNav();
   const classificationSelect = await utilities.buildClassificationList();

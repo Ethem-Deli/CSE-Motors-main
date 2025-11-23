@@ -1,21 +1,17 @@
-/* ******************************************
- * This server.js file is the primary file of the
- * application. It is used to control the project.
- *******************************************/
-
-/* ***********************
- * Require Statements
- *************************/
-// Their stuff
+/*This server.js file is the primary file of the
+ application. It is used to control the project.*/
+/*Require Statements*/
+ 
+// Their stuff meaning the system stuff
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session); //  Added: session store for PostgreSQL
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-require("dotenv").config(); //  Ensure environment variables are loaded
+require("dotenv").config(); // to ensure environment variables are loaded
 
-// My stuff
+// My stuff the files i have to edit
 const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute.js");
@@ -28,19 +24,11 @@ const pool = require("./database"); // PostgreSQL pool connection
 // Init
 const app = express();  
 
-/* ***********************
- * Middleware
- *************************/
-/**
- * Session configuration
- * - Stores sessions in PostgreSQL using connect-pg-simple
- * - Uses SESSION_SECRET from environment variables
- * - Creates table "session" automatically if not found
- */
+/* Middleware*/
 app.use(
   session({
     store: new pgSession({
-      pool: pool, // fixed reference
+      pool: pool,
       tableName: "session",
       createTableIfMissing: true,
     }),
@@ -75,16 +63,12 @@ app.use(cookieParser());
 // JWT checker
 app.use(utilities.checkJWTToken);
 
-/* ***********************
- * View Engine and Templates
- *************************/
+/*View and Templates*/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "./layouts/layout");
 
-/* ***********************
- * Routes
- *************************/
+/* Routes*/
 app.use(static);
 
 // Index route
@@ -110,9 +94,7 @@ app.use(async (req, res, next) => {
   });
 });
 
-/* ***********************
- * Express Error Handler
- *************************/
+/* Express Error Handler */
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
@@ -128,16 +110,12 @@ app.use(async (err, req, res, next) => {
   });
 });
 
-/* ***********************
- * Local Server Information
- *************************/
-const port = process.env.PORT || 3000;
-const host = process.env.HOST || "0.0.0.0"; // uncomment this line before commint for Render
-//const host = process.env.HOST || "localhost"; // uncomment this line for local dev
+/* Local Server Information*/
+const port = process.env.PORT || 5500;
+// const host = process.env.HOST || "0.0.0.0"; // uncomment this line before commint for Render
+const host = process.env.HOST || "localhost"; // uncomment this line for local dev
 
-/* ***********************
- * Log statement to confirm server operation
- *************************/
+/*Log statement to confirm server operation*/
 app.listen(port, host, () => {
   console.log(` App listening on ${host}:${port}`);
 });

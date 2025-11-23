@@ -1,15 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
 const utilities = require("../utilities");
 const accountModel = require("../models/account-model");
 const messageModel = require("../models/message-model");
 
-
-/* ****************************************
- *  Deliver registration view
- * *************************************** */
+/*registration view*/
 async function buildRegister(req, res, next) {
   let nav = await utilities.getNav();
   res.render("account/register", {
@@ -19,9 +15,7 @@ async function buildRegister(req, res, next) {
   });
 }
 
-/* ****************************************
- *  Process Registration
- * *************************************** */
+/*Process Registration */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav();
   const {
@@ -30,11 +24,10 @@ async function registerAccount(req, res) {
     account_email,
     account_password,
   } = req.body;
-
-  // Hash the password before storing
+  // Hash the password before storing it
   let hashedPassword;
   try {
-    // regular password and cost (salt is generated automatically)
+    // regular password and cost is generated automatically
     hashedPassword = await bcrypt.hashSync(account_password, 10);
   } catch (error) {
     req.flash(
@@ -54,7 +47,6 @@ async function registerAccount(req, res) {
     account_email,
     hashedPassword
   );
-
   if (regResult) {
     req.flash(
       "notice",
@@ -75,12 +67,9 @@ async function registerAccount(req, res) {
   }
 }
 
-/* ****************************************
- *  Deliver login view
- * *************************************** */
+/* login view */
 async function buildLogin(req, res, next) {
   let nav = await utilities.getNav();
-  // req.flash("notice", "This is a flash message.!!!@2")
   res.render("account/login", {
     title: "Login",
     errors: null,
@@ -88,37 +77,45 @@ async function buildLogin(req, res, next) {
   });
 }
 
-/* ****************************************
- *  Process login post request
- * ************************************ */
+/*login post request*/
 async function accountLogin(req, res) {
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
+  // if account username or mail not found
   if (!accountData) {
     req.flash("notice", "Please check your credentials and try again.");
-    res.status(400).render("account/login", {
+    return res.status(400).render("account/login", {
       title: "Login",
       nav,
       errors: null,
       account_email,
     });
-    return;
   }
   try {
+    // if user uses correct password
     if (await bcrypt.compare(account_password, accountData.account_password)) {
+
       delete accountData.account_password;
-      
       utilities.updateCookie(accountData, res);
-     
+
       return res.redirect("/account/");
-    } // Need to have a wrong password option
+    } 
+    // if users usersRONG password
     else {
-      req.flash("notice", "Please check your credentials and try again."); // Login was hanging with bad password but correct id
-      res.redirect("/account/");
+      req.flash("notice", "Please check your credentials and try again.");
+      return res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        account_email,
+      });
     }
+
   } catch (error) {
-    return new Error("Access Forbidden");
+    console.error(error);
+    req.flash("notice", "Login failed due to a server error.");
+    return res.status(500).render("account/login", { title: "Login", nav });
   }
 }
 
@@ -141,9 +138,7 @@ async function buildAccountManagementView(req, res) {
   return; 
 }
 
-/* ****************************************
- *  Process logout request
- * ************************************ */
+/*logout request */
 async function accountLogout(req, res) {
   res.clearCookie("jwt")
   delete res.locals.accountData;
@@ -154,9 +149,7 @@ async function accountLogout(req, res) {
 
 }
 
-/* ****************************************
- *  Deliver account update view get
- * *************************************** */
+/* account update view get */
 async function buildUpdate(req, res, next) {
   let nav = await utilities.getNav();
 
@@ -173,9 +166,7 @@ async function buildUpdate(req, res, next) {
   });
 }
 
-/* ****************************************
- *  Process account update post
- * *************************************** */
+/* account update post */
 async function updateAccount(req, res) {
   let nav = await utilities.getNav();
   const {
@@ -183,7 +174,7 @@ async function updateAccount(req, res) {
     account_firstname,
     account_lastname,
     account_email,
-    // account_password,
+    account_password,
   } = req.body;
 
   const regResult = await accountModel.updateAccount(
@@ -200,12 +191,10 @@ async function updateAccount(req, res) {
     );
 
     //Update the cookie accountData
-    // TODO: Better way to do this?
-
-    const accountData = await accountModel.getAccountById(account_id); // Get it from db so we can remake the cookie
+    const accountData = await accountModel.getAccountById(account_id);
     delete accountData.account_password;
-    res.locals.accountData.account_firstname = accountData.account_firstname; // So it displays correctly
-    utilities.updateCookie(accountData, res); // Remake the cookie with new data
+    res.locals.accountData.account_firstname = accountData.account_firstname;
+    utilities.updateCookie(accountData, res);
 
     res.status(201).render("account/account-management", {
       title: "Management",
@@ -226,19 +215,12 @@ async function updateAccount(req, res) {
   }
 }
 
-
-/* ****************************************
- *  Process account password update post
- * *************************************** */
+/*account password update post */
 async function updatePassword(req, res) {
   let nav = await utilities.getNav();
-
   const { account_id, account_password } = req.body;
-
-  // Hash the password before storing.
   let hashedPassword;
   try {
-    // regular password and cost (salt is generated automatically)
     hashedPassword = await bcrypt.hashSync(account_password, 10);
   } catch (error) {
     req.flash(
@@ -251,9 +233,7 @@ async function updatePassword(req, res) {
       errors: null,
     });
   }
-
   const regResult = await accountModel.updatePassword(account_id, hashedPassword);
-
   if (regResult) {
     req.flash(
       "notice",
@@ -273,7 +253,6 @@ async function updatePassword(req, res) {
     });
   }
 }
-
 
 module.exports = { 
   buildLogin, 

@@ -3,9 +3,7 @@ const invModel = require("../models/inventory-model");
 const { body, validationResult } = require("express-validator");
 const validate = {};
 
-/* **********************************
- *  Add classification Data Validation Rules
- * ********************************* */
+/*Add classification Data Validation Rule */
 validate.classificationRules = () => {
   return [
     // firstname is required and must be string
@@ -19,9 +17,7 @@ validate.classificationRules = () => {
   ];
 };
 
-/* ******************************
- * Check data and return errors or continue to registration
- * ***************************** */
+/*Check data and return errors or continue to registration */
 validate.checkClassificationData = async (req, res, next) => {
   const { classification_name } = req.body;
   let errors = [];
@@ -39,9 +35,7 @@ validate.checkClassificationData = async (req, res, next) => {
   next();
 };
 
-/* **********************************
- *  Add inventory Data Validation Rules
- * ********************************* */
+/*Add inventory Data Validation Rules*/
 validate.inventoryRules = () => {
   return [
     // Make is required and must be string
@@ -122,9 +116,7 @@ validate.inventoryRules = () => {
   ];
 };
 
-/* ******************************
- * Check data and return errors or continue to registration
- * ***************************** */
+/*Check data and return errors or continue to registration */
 validate.checkInventoryData = async (req, res, next) => {
   let errors = [];
   errors = validationResult(req);
@@ -146,8 +138,7 @@ validate.checkInventoryData = async (req, res, next) => {
       classification_id
     );
     let nav = await utilities.getNav();
-    res.render("inventory/addInventory", { // Try again
-      errors,
+    res.render("inventory/addInventory", { 
       title: "Add Inventory",
       nav,
       classifications,
@@ -166,12 +157,7 @@ validate.checkInventoryData = async (req, res, next) => {
   next();
 };
 
-
-
-
-/* ******************************
- * Check data and return errors or continue to update. Errors will redirect to edit view
- * ***************************** */
+/*Check data and return errors or continue to update. Errors will redirect to edit view*/
 validate.checkUpdateData = async (req, res, next) => {
   let errors = [];
   errors = validationResult(req);
@@ -194,7 +180,7 @@ validate.checkUpdateData = async (req, res, next) => {
       classification_id
     );
     let nav = await utilities.getNav();
-    res.render("inventory/editInventory", { // Try again
+    res.render("inventory/editInventory", {
       errors,
       title: "Edit " + inv_make + " " + inv_model,
       nav,
@@ -214,6 +200,4 @@ validate.checkUpdateData = async (req, res, next) => {
   }
   next();
 };
-
-
 module.exports = validate;

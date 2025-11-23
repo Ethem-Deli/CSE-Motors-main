@@ -1,7 +1,5 @@
-// Needed Resources
 const express = require("express");
 const router = new express.Router();
-
 const accountController = require("../controllers/accountController");
 const utilities = require("../utilities");
 const regValidate = require("../utilities/account-validation");
@@ -50,7 +48,7 @@ router.get(
 );
 router.post(
   "/update",
-  regValidate.updateRules(), // TODO: This needs to have a separate rule set, without existing email check..unless...oh complex
+  regValidate.updateRules(),
   regValidate.checkUpdateData,
   utilities.handleErrors(accountController.updateAccount)
 );

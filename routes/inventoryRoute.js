@@ -1,12 +1,10 @@
-// Needed Resources 
 const express = require("express");
 const router = new express.Router();
 const invController = require("../controllers/invController");
 const utilities = require("../utilities");
 const invValidate = require("../utilities/inventory-validation");
 
-// Route middleware for management functionality //TODO: Disable management screen
-//router.use(["/add-classification", "/add-inventory", "/edit/:inventoryId", "/update", "/delete/:inventoryId", "/delete/",], utilities.checkLogin);
+// Route middleware for management functionality
 router.use(
   [
     "/add-classification",
@@ -25,7 +23,7 @@ router.get(
   "/",
   utilities.checkAuthorizationManager,
   utilities.handleErrors(invController.buildManagementView)
-); // Had to put checkAuthorizationManager here too. Didn't work above
+);
 
 router.get(
   "/type/:classificationId",
@@ -37,7 +35,7 @@ router.get(
   utilities.handleErrors(invController.buildByInventoryId)
 );
 
-// Route: deliver vehicle detail view
+// Route: vehicle detail view
 router.get(
   "/detail/:inv_id",
   utilities.handleErrors(invController.buildByInvId)
@@ -53,7 +51,7 @@ router.post(
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
   utilities.handleErrors(invController.addClassification)
-); // ...through the appropriate router, where server-side validation middleware is present,...
+);
 
 // Inventory management routes
 router.get(
@@ -67,7 +65,7 @@ router.post(
   utilities.handleErrors(invController.addInventory)
 );
 
-// Build edit/update inventory views
+// edit/update inventory
 router.get(
   "/edit/:inventoryId",
   utilities.handleErrors(invController.buildEditInventory)
@@ -87,9 +85,8 @@ router.get(
 router.post(
   "/delete/",
   utilities.handleErrors(invController.deleteInventory)
-); // Don't need validation
+);
 
-// AJAX inventory api call route
 router.get(
   "/getInventory/:classification_id",
   utilities.handleErrors(invController.getInventoryJSON)

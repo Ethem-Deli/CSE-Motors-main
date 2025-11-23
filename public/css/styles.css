@@ -555,3 +555,40 @@ table thead tr th {
     flex-direction: column;
   }
 }
+
+/* Minimal styling you can place in your CSS file instead or here */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.vehicle-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.vehicle-image {
+  flex: 1 1 420px;
+  min-width: 280px;
+}
+
+.vehicle-info {
+  flex: 1 1 360px;
+  min-width: 260px;
+}
+
+.vehicle-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+@media (max-width:720px) {
+  .vehicle-row {
+    flex-direction: column;
+  }
+}

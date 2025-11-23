@@ -1,57 +1,12 @@
-
-<!-- views/inventory/inventory-detail.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <title>
-        <%= title %>
-    </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-        /* Minimal styling you can place in your CSS file instead */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        .vehicle-row {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
-
-        .vehicle-image {
-            flex: 1 1 420px;
-            min-width: 280px;
-        }
-
-        .vehicle-info {
-            flex: 1 1 360px;
-            min-width: 260px;
-        }
-
-        .vehicle-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
-
-        @media (max-width:720px) {
-            .vehicle-row {
-                flex-direction: column;
-            }
-        }
-    </style>
+    <%include('../partials/head')%>
 </head>
 
 <body>
     <header>
-        <!-- optional nav partial include -->
+        <!-- nav partial include -->
         <%include('../partials/header')%>
     </header>
 
