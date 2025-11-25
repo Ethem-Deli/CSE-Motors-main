@@ -7,8 +7,8 @@ const invValidate = require("../utilities/inventory-validation");
 // Route middleware for management functionality
 router.use(
   [
-    "/add-classification",
-    "/add-inventory",
+    "/addClassification",
+    "/addInventory",
     "/edit/:inventoryId",
     "/update",
     "/delete/:inventoryId",
@@ -35,19 +35,13 @@ router.get(
   utilities.handleErrors(invController.buildByInventoryId)
 );
 
-// Route: vehicle detail view
-router.get(
-  "/detail/:inv_id",
-  utilities.handleErrors(invController.buildByInvId)
-);
-
 // Classification management routes
 router.get(
-  "/add-classification",
+  "/addClassification",
   utilities.handleErrors(invController.buildAddClassification)
 );
 router.post(
-  "/add-classification",
+  "/addClassification",
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
   utilities.handleErrors(invController.addClassification)
@@ -55,11 +49,11 @@ router.post(
 
 // Inventory management routes
 router.get(
-  "/add-inventory",
+  "/addInventory",
   utilities.handleErrors(invController.buildAddInventory)
 );
 router.post(
-  "/add-inventory",
+  "/addInventory",
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   utilities.handleErrors(invController.addInventory)

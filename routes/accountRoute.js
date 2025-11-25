@@ -2,6 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const accountController = require("../controllers/accountController");
 const utilities = require("../utilities");
+const Util = require("../utilities");
 const regValidate = require("../utilities/account-validation");
 
 // Build account management view
@@ -58,5 +59,12 @@ router.post(
   regValidate.checkUpdatePasswordData,
   utilities.handleErrors(accountController.updatePassword)
 );
+
+router.get('/manage', utilities.checkJWTToken, utilities.handleErrors(accountController.buildAccountManagement));
+
+router.get("/manage", Util.handleErrors(async (req, res, next) => {
+  const accounts = await accountModel.getAllAccounts();
+  res.render("account/manage", { accounts });
+}));
 
 module.exports = router;

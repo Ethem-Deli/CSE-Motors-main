@@ -117,23 +117,21 @@ validate.updatePasswordRules = () => {
 };
 
 /*Check data if validation fails return errors, if passed continue to registration */
+
+
 validate.checkRegData = async (req, res, next) => {
-    const { account_firstname, account_lastname, account_email } = req.body;
-    let errors = [];
-    errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        let nav = await utilities.getNav();
-        res.render("account/register", {
-            errors,
-            title: "Registration",
-            nav,
-            account_firstname,
-            account_lastname,
-            account_email,
-        });
-        return;
-    }
-    next();
+  const { account_firstname, account_lastname, account_email } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("account/register", {
+      errors,
+      title: "Registration",
+      account_firstname,
+      account_lastname,
+      account_email,
+    });
+  }
+  next();
 };
 
 /* Check data and return errors or continue to update */

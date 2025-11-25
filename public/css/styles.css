@@ -592,3 +592,71 @@ table thead tr th {
     flex-direction: column;
   }
 }
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 15px;
+  list-style: none
+}
+
+.nav-left a,
+.nav-right a {
+  text-decoration: none;
+  font-weight: 500;
+}
+/* HEADER (top row) */
+#site-header {
+  background: white;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+#site-header .header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* brand left, account right */
+  padding: 12px 20px;
+}
+
+/* Brand */
+.brand h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #0b4f6c;
+}
+
+/* Account area on right */
+.account-area {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+
+#primary-nav .nav-left {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 18px;
+  list-style: none;
+  padding: 10px 20px;
+  align-items: center;
+}
+
+#primary-nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 6px;
+}
+
+#primary-nav a:hover {
+  text-decoration: underline;
+}

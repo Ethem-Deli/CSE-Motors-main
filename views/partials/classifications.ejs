@@ -1,0 +1,10 @@
+<ul class="classifications">
+    <% classifications.forEach(classification=> { %>
+        <li>
+            <a href="/inv/type/<%= classification.classification_id %>"
+                title="View <%= classification.classification_name %> vehicles">
+                <%= classification.classification_name %>
+            </a>
+        </li>
+        <% }) %>
+</ul>

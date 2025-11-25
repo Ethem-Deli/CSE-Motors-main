@@ -1,3 +1,15 @@
-<nav>
-    <%- nav %>
+<nav id="primary-nav">
+  <ul class="nav-left">
+    <li><a href="/">Home</a></li>
+
+    <% if (classifications && classifications.length> 0) { %>
+      <% classifications.forEach(c=> { %>
+        <li>
+          <a href="/inv/type/<%= c.classification_id %>">
+            <%= c.classification_name %>
+          </a>
+        </li>
+        <% }) %>
+          <% } %>
+  </ul>
 </nav>

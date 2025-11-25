@@ -1,10 +1,8 @@
 const invModel = require("../models/inventory-model");
 const jwt = require("jsonwebtoken");
-
 require("dotenv").config();
 
 const Util = {};
-
 /**
 * @typedef {Object} Message
 * @property {number} message_id
@@ -16,156 +14,100 @@ const Util = {};
 * @property {boolean} message_read
 * @property {boolean} message_archived
 */
-
-
-/*Constructs the nav HTML unordered list */
-Util.getNav = async function (req, res, next) {
-  let data = await invModel.getClassifications();
-  let list = "<ul>";
-  list += '<li><a href="/" title="Home page">Home</a></li>';
-  data.rows.forEach((row) => {
-    list += "<li>";
-    list +=
-      '<a href="/inv/type/' +
-      row.classification_id +
-      '" title="See our inventory of ' +
-      row.classification_name +
-      ' vehicles">' +
-      row.classification_name +
-      "</a>";
-    list += "</li>";
-  });
-  list += "</ul>";
-  return list;
+/* get calssifications data */
+Util.getClassifications = async function () {
+  const data = await invModel.getClassifications();
+  return data.rows; // pure data for navigation partial
 };
 
-/*Build the classification view HTMl */
-Util.buildClassificationGrid = async function (data) {
-  let grid;
-  if (data.length > 0) {
-    grid = '<ul id="inv-display">';
-    data.forEach((vehicle) => {
-      grid += "<li>";
-      grid +=
-        '<a href="../../inv/detail/' +
-        vehicle.inv_id +
-        '" title="View ' +
-        vehicle.inv_make +
-        " " +
-        vehicle.inv_model +
-        'details"><img src="' +
-        vehicle.inv_thumbnail +
-        '" alt="Image of ' +
-        vehicle.inv_make +
-        " " +
-        vehicle.inv_model +
-        ' on CSE Motors" /></a>';
-      grid += '<div class="namePrice">';
-      grid += "<hr />";
-      grid += "<h2>";
-      grid +=
-        '<a href="../../inv/detail/' +
-        vehicle.inv_id +
-        '" title="View ' +
-        vehicle.inv_make +
-        " " +
-        vehicle.inv_model +
-        ' details">' +
-        vehicle.inv_make +
-        " " +
-        vehicle.inv_model +
-        "</a>";
-      grid += "</h2>";
-      grid +=
-        "<span>$" +
-        new Intl.NumberFormat("en-US").format(vehicle.inv_price) +
-        "</span>";
-      grid += "</div>";
-      grid += "</li>";
-    });
-    grid += "</ul>";
-  } else {
-    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
-  }
-  return grid;
-};
-
-/*Build a single listing element from data */
-Util.buildItemListing = async function (data) {
-  let listingHTML = "";
-  console.dir({ data });
-  if (data) {
-    listingHTML = `
-      <section class="car-listing">
-        <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
-        <div class="car-information">
-          <div>
-            <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
-          </div>
-          <div>
-            ${Number.parseFloat(data.inv_price).toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-            })}
-          </div>
-          <div class="description">
-            <p>
-              ${data.inv_description}
-            </p>
-            <dl>
-              <dt>MILEAGE</dt>
-              <dd>${data.inv_miles.toLocaleString("en-US", {
-                style: "decimal",
-              })}</dd>
-              <dt>COLOR</dt>
-              <dd>${data.inv_color}</dd>
-              <dt>CLASS</dt>
-              <dd>${data.classification_name}</dd>
-            </dl>
-          </div>
-
-        </div>
-      </section>
-    `;
-  } else {
-    listingHTML = `
-      <p>Sorry, no matching vehicles could be found.</p>
-    `;
-  }
-  return listingHTML;
-};
-
-/**
- * Build an HTML select element with classification data
- * @param {int} classification_id
- * @returns {string}
- */
-
+/* BUILD CLASSIFICATION*/
 Util.buildClassificationList = async function (classification_id = null) {
-  let data = await invModel.getClassifications();
+  const data = await invModel.getClassifications();
   let classificationList =
     '<select name="classification_id" id="classificationList" required>';
+
   classificationList += "<option value=''>Choose a Classification</option>";
+
   data.rows.forEach((row) => {
-    classificationList += '<option value="' + row.classification_id + '"';
-    if (
-      classification_id != null &&
-      row.classification_id == classification_id
-    ) {
-      classificationList += " selected ";
-    }
-    classificationList += ">" + row.classification_name + "</option>";
+    classificationList += `<option value="${row.classification_id}" ${
+      classification_id == row.classification_id ? "selected" : ""
+    }>${row.classification_name}</option>`;
   });
+
   classificationList += "</select>";
   return classificationList;
 };
 
-/* Middleware For Handling Errors, Wrap other function in this for
- general Error Handling */
+/* BUILD VEHICLE */
+Util.buildClassificationGrid = async function (data) {
+  let grid;
+
+  if (data.length > 0) {
+    grid = '<ul id="invdisplay">';
+    data.forEach((vehicle) => {
+      grid += `
+        <li>
+          <a href="../../inv/detail/${vehicle.inv_id}">
+            <img src="${vehicle.inv_thumbnail}" 
+                 alt="Image of ${vehicle.inv_make} ${vehicle.inv_model} on CSE Motors" />
+          </a>
+          <div class="namePrice">
+            <hr />
+            <h2>
+              <a href="../../inv/detail/${vehicle.inv_id}">
+                ${vehicle.inv_make} ${vehicle.inv_model}
+              </a>
+            </h2>
+            <span>$${new Intl.NumberFormat("enUS").format(
+              vehicle.inv_price
+            )}</span>
+          </div>
+        </li>`;
+    });
+    grid += "</ul>";
+  } else {
+    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+  }
+
+  return grid;
+};
+
+/*BUILD VEHICLE DETAIL HTML */
+Util.buildVehicleDetailHTML = function (vehicle) {
+  const priceFormatted = vehicle.inv_price.toLocaleString("enUS", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  const milesFormatted = vehicle.inv_miles.toLocaleString("enUS");
+
+  return `
+    <section class="vehicledetail">
+      <div class="vehicledetailcontainer">
+        
+        <div class="vehicleimage">
+          <img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">
+        </div>
+
+        <div class="vehicleinfo">
+          <h1>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h1>
+          <h2 class="price">${priceFormatted}</h2>
+
+          <p><strong>Description:</strong> ${vehicle.inv_description}</p>
+          <p><strong>Color:</strong> ${vehicle.inv_color}</p>
+          <p><strong>Mileage:</strong> ${milesFormatted} miles</p>
+        </div>
+
+      </div>
+    </section>
+  `;
+};
+
+/*ERROR HANDLING WRAPPER*/
 Util.handleErrors = (fn) => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next);
 
-/*Middleware to check token validity */
+/* JWT CHECK MIDDLEWARE*/
 Util.checkJWTToken = (req, res, next) => {
   if (req.cookies.jwt) {
     jwt.verify(
@@ -187,27 +129,25 @@ Util.checkJWTToken = (req, res, next) => {
   }
 };
 
-/**
- * Function to update the browser cookie.
- * @param {object} accountData
- * @param {import("express").Response} res
- */
+/*UPDATE COOKIE (JWT) */
 Util.updateCookie = (accountData, res) => {
   const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: 3600,
   });
-  if (process.env.NODE_ENV === "development") {
-    res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-  } else {
-    res.cookie("jwt", accessToken, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 3600 * 1000,
-    });
+
+  const cookieOptions = {
+    httpOnly: true,
+    maxAge: 3600 * 1000,
+  };
+
+  if (process.env.NODE_ENV !== "development") {
+    cookieOptions.secure = true;
   }
+
+  res.cookie("jwt", accessToken, cookieOptions);
 };
 
-/* Check Login */
+/*GENERAL LOGIN CHECK */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next();
@@ -217,7 +157,8 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
-/*Check authorization*/
+/*  MANAGER /ADMIN OR EMPLOYEE AUTHORIZATION
+ */
 Util.checkAuthorizationManager = (req, res, next) => {
   if (req.cookies.jwt) {
     jwt.verify(
@@ -229,6 +170,7 @@ Util.checkAuthorizationManager = (req, res, next) => {
           res.clearCookie("jwt");
           return res.redirect("/account/login");
         }
+
         if (
           accountData.account_type == "Employee" ||
           accountData.account_type == "Admin"
@@ -245,80 +187,50 @@ Util.checkAuthorizationManager = (req, res, next) => {
     return res.redirect("/account/login");
   }
 };
-
-/**
- * Build an html table string from the message array
- * @param {Array<Message>} messages 
- * @returns 
- */
+/*INBOX TABLE BUILD*/
 Util.buildInbox = (messages) => {
   let inboxList = `
-  <table>
-    <thead>
-      <tr>
-        <th>Received</th><th>Subject</th><th>From</th><th>Read</th>
-      </tr>
-    </thead>
-    <tbody>`;
+    <table>
+      <thead>
+        <tr>
+          <th>Received</th><th>Subject</th><th>From</th><th>Read</th>
+        </tr>
+      </thead>
+      <tbody>`;
 
   messages.forEach((message) => {
     inboxList += `
-    <tr>
-      <td>${message.message_created.toLocaleString()}</td>
-      <td><a href="/message/view/${message.message_id}">${message.message_subject}</a></td>
-      <td>${message.account_firstname} ${message.account_type}</td>
-      <td>${message.message_read ? "✓" : " "}</td>
-    </tr>`;
+      <tr>
+        <td>${message.message_created.toLocaleString()}</td>
+        <td><a href="/message/view/${message.message_id}">${message.message_subject}</a></td>
+        <td>${message.account_firstname} ${message.account_lastname}</td>
+        <td>${message.message_read ? "✓" : ""}</td>
+      </tr>`;
   });
 
   inboxList += `
-  </tbody>
-  </table> `;
+      </tbody>
+    </table>
+  `;
   return inboxList;
 };
 
-Util.buildRecipientList = (recipientData, preselected = null) => {
+/*RECIPIENTLIST BUILD */
+Util.buildRecipientList = (recipients, preselected = null) => {
   let list = `<select name="message_to" required>`;
   list += '<option value="">Select a recipient</option>';
 
-  recipientData.forEach((recipient) => {
-    list += `<option ${preselected == recipient.account_id ? "selected" : ""} value="${recipient.account_id}">${recipient.account_firstname} ${recipient.account_lastname}</option>`
+  recipients.forEach((recipient) => {
+    list += `<option value="${recipient.account_id}" ${
+      preselected == recipient.account_id ? "selected" : ""
+    }>
+      ${recipient.account_firstname} ${recipient.account_lastname}
+    </option>`;
   });
-  list += "</select>"
 
+  list += "</select>";
   return list;
 };
 
-/** to build the vehicle detail HTML */
-Util.buildVehicleDetailHTML = function (vehicle) {
-  const priceFormatted = vehicle.inv_price.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-
-  const milesFormatted = vehicle.inv_miles.toLocaleString("en-US");
-
-  return `
-    <section class="vehicle-detail">
-      <div class="vehicle-detail-container">
-        
-        <div class="vehicle-image">
-          <img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">
-        </div>
-
-        <div class="vehicle-info">
-          <h1>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h1>
-
-          <h2 class="price">${priceFormatted}</h2>
-
-          <p><strong>Description:</strong> ${vehicle.inv_description}</p>
-          <p><strong>Color:</strong> ${vehicle.inv_color}</p>
-          <p><strong>Mileage:</strong> ${milesFormatted} miles</p>
-        </div>
-
-      </div>
-    </section>
-  `;
-};
-
+//EXPORT THE MODULE 
 module.exports = Util;
