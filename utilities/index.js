@@ -174,31 +174,42 @@ Util.handleErrors = (fn) => (req, res, next) =>
 
 /* JWT CHECK MIDDLEWARE*/
 Util.checkJWTToken = (req, res, next) => {
-  if (req.cookies.jwt) {
-    jwt.verify(
-      req.cookies.jwt,
-      process.env.ACCESS_TOKEN_SECRET,
-      function (err, accountData) {
-        if (err) {
-          req.flash("Please log in");
-          res.clearCookie("jwt");
-          return res.redirect("/account/login");
+  try {
+    const token = req.cookies.jwt;
+    if (token) {
+      jwt.verify(
+        token, 
+        process.env.JWT_SECRET || "fallback-secret",
+        (err, decoded) => {
+          if (!err && decoded) {
+            res.locals.loggedin = true;
+            res.locals.accountData = decoded;
+            // Make sure account_type is preserved
+            console.log('Decoded JWT:', decoded);
+          } else {
+            console.error('JWT verification error:', err);
+          }
+          next();
         }
-        res.locals.accountData = accountData;
-        res.locals.loggedin = 1;
-        next();
-      }
-    );
-  } else {
+      );
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.error('JWT middleware error:', error);
     next();
   }
 };
 
 /*UPDATE COOKIE (JWT) */
 Util.updateCookie = (accountData, res) => {
-  const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: 3600,
-  });
+  const accessToken = jwt.sign(
+    accountData, 
+    process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET || "fallback-secret-for-development",
+    {
+      expiresIn: 3600,
+    }
+  );
 
   const cookieOptions = {
     httpOnly: true,
@@ -211,7 +222,6 @@ Util.updateCookie = (accountData, res) => {
 
   res.cookie("jwt", accessToken, cookieOptions);
 };
-
 /*GENERAL LOGIN CHECK */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
@@ -228,10 +238,10 @@ Util.checkAuthorizationManager = (req, res, next) => {
   if (req.cookies.jwt) {
     jwt.verify(
       req.cookies.jwt,
-      process.env.ACCESS_TOKEN_SECRET,
+      process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET || "fallback-secret-for-development",
       function (err, accountData) {
         if (err) {
-          req.flash("Please log in");
+          req.flash("notice", "Please log in");
           res.clearCookie("jwt");
           return res.redirect("/account/login");
         }
@@ -240,6 +250,7 @@ Util.checkAuthorizationManager = (req, res, next) => {
           accountData.account_type == "Employee" ||
           accountData.account_type == "Admin"
         ) {
+          res.locals.accountData = accountData; // Make sure account data is available
           next();
         } else {
           req.flash("notice", "You are not authorized to modify inventory.");
