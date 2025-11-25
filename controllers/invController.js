@@ -100,13 +100,24 @@ invCont.addClassification = async function (req, res, next) {
 };
 
 invCont.buildAddInventory = async function (req, res, next) {
-  let classifications = await utilities.buildClassificationList();
+  try {
+    // Get classifications directly from model
+    const classificationsResult = await invModel.getClassifications();
+    const classifications = Array.isArray(classificationsResult.rows) ? classificationsResult.rows : [];
+    
+    // Build the classification list for the dropdown
+    const classificationList = await utilities.buildClassificationList();
 
-  res.render("inventory/addInventory", {
-    title: "Add Vehicle",
-    errors: null,
-    classifications,
-  });
+    res.render("inventory/addInventory", {
+      title: "Add Vehicle",
+      errors: null,
+      classifications: classificationList, // This should be the HTML select, not the raw data
+      classificationsData: classifications // Pass raw data if needed elsewhere
+    });
+  } catch (error) {
+    console.error("Error in buildAddInventory:", error);
+    next(error);
+  }
 };
 
 invCont.addInventory = async function (req, res, next) {

@@ -2,7 +2,7 @@
   <ul class="nav-left">
     <li><a href="/">Home</a></li>
 
-    <% if (classifications && classifications.length> 0) { %>
+    <% if (typeof classifications !=='undefined' && Array.isArray(classifications) && classifications.length> 0) { %>
       <% classifications.forEach(c=> { %>
         <li>
           <a href="/inv/type/<%= c.classification_id %>">
@@ -10,6 +10,8 @@
           </a>
         </li>
         <% }) %>
-          <% } %>
+          <% } else { %>
+            <li><a href="/inv">Inventory</a></li>
+            <% } %>
   </ul>
 </nav>

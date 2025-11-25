@@ -72,16 +72,19 @@ app.set("layout", "./layouts/layout");
 
 // Routes 
 app.use(static);
+
 app.use(async (req, res, next) => {
   try {
-    const data = await invModel.getClassifications();
-    res.locals.classifications = data.rows;
+    const classificationsResult = await invModel.getClassifications();
+    res.locals.classifications = Array.isArray(classificationsResult.rows) ? classificationsResult.rows : [];
     next();
   } catch (error) {
     console.error("Error loading classifications:", error);
+    res.locals.classifications = [];
     next();
   }
 });
+
 // Home route
 app.get("/", utilities.handleErrors(baseController.buildHome));
 

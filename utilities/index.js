@@ -17,25 +17,29 @@ const Util = {};
 /* get calssifications data */
 Util.getClassifications = async function () {
   const data = await invModel.getClassifications();
-  return data.rows; // pure data for navigation partial
+  return data.rows;
 };
 
 /* BUILD CLASSIFICATION*/
 Util.buildClassificationList = async function (classification_id = null) {
-  const data = await invModel.getClassifications();
-  let classificationList =
-    '<select name="classification_id" id="classificationList" required>';
+  let data = await invModel.getClassifications();
 
-  classificationList += "<option value=''>Choose a Classification</option>";
+  // FIX: extract rows array
+  let classifications = data.rows;
 
-  data.rows.forEach((row) => {
-    classificationList += `<option value="${row.classification_id}" ${
-      classification_id == row.classification_id ? "selected" : ""
-    }>${row.classification_name}</option>`;
+  let list = `<select name="classification_id" id="classification_id" required>`;
+  list += `<option value="">Choose a Classification</option>`;
+
+  classifications.forEach((row) => {
+    let selected = "";
+    if (classification_id != null && row.classification_id == classification_id) {
+      selected = " selected";
+    }
+    list += `<option value="${row.classification_id}"${selected}>${row.classification_name}</option>`;
   });
 
-  classificationList += "</select>";
-  return classificationList;
+  list += "</select>";
+  return list;
 };
 
 /* BUILD VEHICLE */
