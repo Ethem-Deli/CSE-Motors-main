@@ -175,53 +175,52 @@ Util.handleErrors = (fn) => (req, res, next) =>
 /* JWT CHECK MIDDLEWARE*/
 Util.checkJWTToken = (req, res, next) => {
   try {
-    const token = req.cookies.jwt;
-    if (token) {
-      jwt.verify(
-        token, 
-        process.env.JWT_SECRET || "fallback-secret",
-        (err, decoded) => {
-          if (!err && decoded) {
-            res.locals.loggedin = true;
-            res.locals.accountData = decoded;
-            // Make sure account_type is preserved
-            console.log('Decoded JWT:', decoded);
-          } else {
-            console.error('JWT verification error:', err);
-          }
-          next();
-        }
-      );
-    } else {
-      next();
+    const token = req.cookies?.jwt;
+    if (!token) {
+      res.locals.loggedin = false;
+      res.locals.accountData = null;
+      return next();
     }
+    jwt.verify(token, process.env.JWT_SECRET || "fallback-secret", (err, decoded) => {
+      if (!err && decoded) {
+        res.locals.loggedin = true;
+        res.locals.accountData = decoded;
+      } else {
+        res.locals.loggedin = false;
+        res.locals.accountData = null;
+        if (err) console.error("JWT verify error:", err);
+      }
+      return next();
+    });
   } catch (error) {
-    console.error('JWT middleware error:', error);
-    next();
+    console.error("JWT middleware unexpected error:", error);
+    res.locals.loggedin = false;
+    res.locals.accountData = null;
+    return next();
   }
 };
 
 /*UPDATE COOKIE (JWT) */
 Util.updateCookie = (accountData, res) => {
-  const accessToken = jwt.sign(
-    accountData, 
-    process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET || "fallback-secret-for-development",
-    {
-      expiresIn: 3600,
-    }
-  );
-
-  const cookieOptions = {
-    httpOnly: true,
-    maxAge: 3600 * 1000,
+  const payload = {
+    account_id: accountData.account_id,
+    account_firstname: accountData.account_firstname,
+    account_lastname: accountData.account_lastname,
+    account_email: accountData.account_email,
+    account_type: accountData.account_type
   };
 
-  if (process.env.NODE_ENV !== "development") {
-    cookieOptions.secure = true;
-  }
+  const token = jwt.sign(payload, process.env.JWT_SECRET || "fallback-secret", {
+    expiresIn: "1h",
+  });
 
-  res.cookie("jwt", accessToken, cookieOptions);
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    maxAge: 3600 * 1000,
+    secure: process.env.NODE_ENV === "production",
+  });
 };
+
 /*GENERAL LOGIN CHECK */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
@@ -232,36 +231,26 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
-/*  MANAGER /ADMIN OR EMPLOYEE AUTHORIZATION
- */
+/*  MANAGER/ADMIN OR EMPLOYEE AUT */
 Util.checkAuthorizationManager = (req, res, next) => {
-  if (req.cookies.jwt) {
-    jwt.verify(
-      req.cookies.jwt,
-      process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET || "fallback-secret-for-development",
-      function (err, accountData) {
-        if (err) {
-          req.flash("notice", "Please log in");
-          res.clearCookie("jwt");
-          return res.redirect("/account/login");
-        }
-
-        if (
-          accountData.account_type == "Employee" ||
-          accountData.account_type == "Admin"
-        ) {
-          res.locals.accountData = accountData; // Make sure account data is available
-          next();
-        } else {
-          req.flash("notice", "You are not authorized to modify inventory.");
-          return res.redirect("/account/login");
-        }
-      }
-    );
-  } else {
+  if (!req.cookies.jwt) {
     req.flash("notice", "You are not authorized to modify inventory.");
     return res.redirect("/account/login");
   }
+  jwt.verify(req.cookies.jwt, process.env.JWT_SECRET || "fallback-secret", (err, accountData) => {
+    if (err) {
+      req.flash("notice", "Please log in");
+      res.clearCookie("jwt");
+      return res.redirect("/account/login");
+    }
+    if (accountData.account_type === "Employee" || accountData.account_type === "Admin") {
+      res.locals.accountData = accountData; 
+      next();
+    } else {
+      req.flash("notice", "You are not authorized to modify inventory.");
+      return res.redirect("/account/login");
+    }
+  });
 };
 /*INBOX TABLE BUILD*/
 Util.buildInbox = (messages) => {

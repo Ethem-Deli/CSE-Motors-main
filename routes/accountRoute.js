@@ -2,8 +2,8 @@ const express = require("express");
 const router = new express.Router();
 const accountController = require("../controllers/accountController");
 const utilities = require("../utilities");
-const Util = require("../utilities");
 const regValidate = require("../utilities/account-validation");
+const accountModel = require("../models/account-model");
 
 // Build account management view
 router.get(
@@ -45,6 +45,7 @@ router.post(
 // Update account handlers
 router.get(
   "/update/:accountId",
+  utilities.checkLogin,
   utilities.handleErrors(accountController.buildUpdate)
 );
 router.post(
@@ -59,12 +60,11 @@ router.post(
   regValidate.checkUpdatePasswordData,
   utilities.handleErrors(accountController.updatePassword)
 );
-
-router.get('/manage', utilities.checkJWTToken, utilities.handleErrors(accountController.buildAccountManagement));
-
-router.get("/manage", Util.handleErrors(async (req, res, next) => {
-  const accounts = await accountModel.getAllAccounts();
-  res.render("account/manage", { accounts });
-}));
+// Manage accounts
+router.get(
+  "/manage",
+  utilities.checkJWTToken,
+  utilities.handleErrors(accountController.buildManageAccounts)
+);
 
 module.exports = router;
