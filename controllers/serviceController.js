@@ -101,7 +101,7 @@ serviceController.delete = async (req, res, next) => {
     }
 
     req.flash('success', 'Record deleted');
-    return res.redirect('back');
+    return res.redirect(req.get("Referrer") || `/service/list/${inv_id}`);//changed the redirect line from return res.redirect('back'); to this as per the error 
   } catch (err) {
     next(err);
   }
