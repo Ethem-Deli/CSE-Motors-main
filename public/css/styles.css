@@ -734,3 +734,174 @@ div.error-display img {
     padding: 1rem;
   }
 }
+/*Service Form Page Styling*/
+.service-form-wrapper {
+  max-width: 700px;
+  margin: 2.5rem auto;
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  border: 2px solid #0c3b0a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  font-family: "Arial", sans-serif;
+}
+
+.service-form-wrapper h2 {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: #8b0000;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #8b0000;
+  margin-bottom: 0.3rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1.8px solid #0c3b0a;
+  border-radius: 6px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #144f13;
+  box-shadow: 0 0 6px rgba(20, 79, 19, 0.4);
+}
+
+textarea.form-control {
+  height: 110px;
+  resize: vertical;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #0c3b0a !important;
+  border: none !important;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 6px;
+  color: #fff !important;
+  transition: 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #2fafff !important;
+}
+
+.btn-secondary {
+  color: #6b0000;
+  font-weight: 700;
+  margin-left: 10px;
+  text-decoration: underline;
+}
+
+.btn-secondary:hover {
+  color: #a00000;
+}
+
+/* Alert box */
+.alert-danger {
+  border-radius: 6px;
+  padding: 10px;
+  background: #ffd1d1;
+  border: 1px solid #a10000;
+  color: #700000;
+  font-weight: 600;
+}
+
+/* ============================
+   Account Update Page Styling
+   ============================ */
+.account-wrapper {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: #ffffff;
+  border: 2px solid #0c3b0a;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.account-wrapper h1,
+.account-wrapper h2 {
+  text-align: center;
+  font-weight: 700;
+  color: #8b0000;
+  /* dark red */
+  margin-bottom: 1rem;
+}
+
+.account-wrapper hr {
+  margin: 2rem 0;
+  border: 1px solid #ccc;
+}
+
+.account-form label {
+  display: block;
+  font-weight: 600;
+  color: #8b0000;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.account-form input {
+  width: 100%;
+  padding: .7rem;
+  border-radius: 6px;
+  border: 1.8px solid #0c3b0a;
+  font-size: 1rem;
+}
+
+.account-form input:focus {
+  outline: none;
+  border-color: #144f13;
+  box-shadow: 0 0 6px rgba(20, 79, 19, 0.4);
+}
+
+/* Button styling */
+.account-form button {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  background-color: #0c3b0a;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 6px;
+  transition: 0.25s ease;
+  cursor: pointer;
+}
+
+.account-form button:hover {
+  background-color: #145a10;
+}
+
+.notice {
+  color: #700000;
+  background: #ffd1d1;
+  padding: .5rem 1rem;
+  border: 1px solid #a10000;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.account-wrapper a {
+  color: #8b0000;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.account-wrapper a:hover {
+  color: #a50000;
+}

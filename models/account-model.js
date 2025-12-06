@@ -88,6 +88,20 @@ async function getAllAccounts() {
     throw error;
   }
 }
+async function getAccountList() {
+  try {
+    const sql = `
+      SELECT account_id, account_firstname, account_lastname 
+      FROM account
+      ORDER BY account_lastname ASC;
+    `;
+    const data = await pool.query(sql);
+    return data.rows;
+  } catch (error) {
+    console.error("getAccountList error:", error);
+    throw error;
+  }
+}
 
 module.exports = {
   registerAccount,
@@ -96,5 +110,6 @@ module.exports = {
   getAccountById,
   updateAccount,
   updatePassword,
+  getAccountList,
   getAllAccounts,
 };
