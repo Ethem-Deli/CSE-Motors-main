@@ -27,5 +27,11 @@
     <input type="hidden" name="inv_id"
     <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
     <% } %>> 
+    <p>
+      <a href="/service/list/<%= locals.inv_id %>" class="btn btn-outline-primary">
+        View Service History
+      </a>
+    </p>
+
     <script src="/js/inv-update.js"></script>//to be added for enchancement 
   </form>

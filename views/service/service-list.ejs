@@ -1,0 +1,74 @@
+<%- include('../partials/header') %>
+<h1><%- title %></h1>
+
+<!-- Flash messages -->
+<%- messages() %>
+
+    <!-- Validation errors -->
+    <% if (errors) { %>
+        <ul class="notice">
+            <% errors.array().forEach(error=> { %>
+                <li>
+                    <%= error.msg %>
+                </li>
+                <% }) %>
+        </ul>
+        <% } %>
+    <div class="container">
+        <h2>Service history for <%= vehicle.inv_make %>
+                <%= vehicle.inv_model %> (<%= vehicle.inv_year %>)</h2>
+
+        <a class="btn btn-success mb-3" href="/service/add/<%= vehicle.inv_id %>">Add service record</a>
+
+        <% if (!records || records.length===0) { %>
+            <p>No service records yet.</p>
+            <% } else { %>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Mileage</th>
+                            <th>Description</th>
+                            <th>Cost</th>
+                            <th>Service Center</th>
+                            <th>Next Service</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% records.forEach(function(r) { %>
+                            <tr>
+                                <td>
+                                    <%= r.service_date ? r.service_date.toISOString().slice(0,10) : '' %>
+                                </td>
+                                <td>
+                                    <%= r.mileage || '' %>
+                                </td>
+                                <td>
+                                    <%= r.description %>
+                                </td>
+                                <td>
+                                    <%= r.cost ? r.cost.toFixed(2) : '' %>
+                                </td>
+                                <td>
+                                    <%= r.service_center || '' %>
+                                </td>
+                                <td>
+                                    <%= r.next_service_date ? r.next_service_date.toISOString().slice(0,10) : '' %>
+                                </td>
+                                <td>
+                                    <form action="/service/delete/<%= r.service_id %>" method="post"
+                                        onsubmit="return confirm('Delete this record?');">
+                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+
+                    <a href="/inventory/detail/<%= vehicle.inv_id %>" class="btn btn-secondary mt-3">Back to vehicle</a>
+    </div>
+
+    <%- include('../partials/footer') %>

@@ -1,6 +1,6 @@
 // This server.js file is the primary file of the application
 
-// Their stuff - meaning the system stuff
+// the system stuff
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-// My stuff - the files i have to edit
+// the files i have to edit
 const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute.js");
@@ -18,9 +18,13 @@ const messageRoute = require("./routes/messageRoute.js");
 const intentionalErrorRoute = require("./routes/intentionalErrorRoute.js");
 const utilities = require("./utilities/index.js");
 const pool = require("./database");
+const serviceRoutes = require('./routes/service-routes'); //for Enhancement week 6
+const invModel = require("./models/inventory-model");
+
 // Init
 const app = express();
-const invModel = require("./models/inventory-model");
+
+app.use('/service', serviceRoutes);//for Enhancement week 6
 // Sessions/MIDDLEWARE
 app.use(
   session({

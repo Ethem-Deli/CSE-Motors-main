@@ -21,11 +21,9 @@ CREATE TABLE IF NOT EXISTS public.inventory (
   classification_id integer NOT NULL,
   CONSTRAINT inventory_pkey PRIMARY KEY (inv_id)
 );
-
 UPDATE account
 SET account_type = 'Employee'
 WHERE account_email = 'edeli@cse340.com';
-
 -- Create relationship between `classification` and `inventory` tables
 ALTER TABLE IF EXISTS public.inventory
 ADD CONSTRAINT fk_classification FOREIGN KEY (classification_id) REFERENCES public.classification (classification_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
@@ -266,4 +264,17 @@ CREATE TABLE IF NOT EXISTS public.message (
   CONSTRAINT message_pkey PRIMARY KEY (message_id),
   CONSTRAINT to_fkey FOREIGN KEY (message_to) REFERENCES public.account (account_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION,
   CONSTRAINT from_fkey FOREIGN KEY (message_from) REFERENCES public.account (account_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION
+);
+-- Enhancement for week 6 Service History Table
+CREATE TABLE IF NOT EXISTS service_records (
+  service_id SERIAL PRIMARY KEY,
+  inv_id INT NOT NULL,
+  service_date DATE NOT NULL,
+  mileage INT,
+  description TEXT NOT NULL,
+  cost NUMERIC(10, 2) DEFAULT 0.00,
+  service_center VARCHAR(255),
+  next_service_date DATE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_vehicle FOREIGN KEY (inv_id) REFERENCES inventory(inv_id) ON DELETE CASCADE
 );
