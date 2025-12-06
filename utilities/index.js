@@ -104,23 +104,32 @@ Util.buildItemListing = async function (vehicle) {
     }
 
     const listingHTML = `
-      <section class="car-listing">
-        <img src="${vehicle.inv_image}" alt="${vehicle.inv_make} ${vehicle.inv_model}">
-        <div class="car-information">
-          <h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>
-          <p class="price">${formattedPrice}</p>
-          <hr>
-          <h3>Description:</h3>
-          <p>${vehicle.inv_description}</p>
-          <dl>
-            <dt>Color</dt>
-            <dd>${vehicle.inv_color}</dd>
-            <dt>Miles</dt>
-            <dd>${vehicle.inv_miles.toLocaleString('en-US')}</dd>
-          </dl>
-        </div>
-      </section>
-    `;
+  <section class="car-listing">
+    <img src="${vehicle.inv_image}" alt="${vehicle.inv_make} ${vehicle.inv_model}">
+    <div class="car-information">
+      <h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>
+      <p class="price">${formattedPrice}</p>
+      <hr>
+      <h3>Description:</h3>
+      <p>${vehicle.inv_description}</p>
+      <dl>
+        <dt>Color</dt>
+        <dd>${vehicle.inv_color}</dd>
+        <dt>Miles</dt>
+        <dd>${vehicle.inv_miles.toLocaleString('en-US')}</dd>
+      </dl>
+
+      <!-- 🛠 Added Service History Button -->
+      <p style="margin-top: 1rem;">
+        <a href="/service/list/${vehicle.inv_id}" 
+           style="display:inline-block;padding:.5rem 1rem;background:#003300;
+                  color:#fff;border-radius:4px;text-decoration:none;">
+           🛠 View Service History
+        </a>
+      </p>
+    </div>
+  </section>
+`;
 
     return listingHTML;
   } catch (error) {
@@ -157,6 +166,14 @@ Util.buildVehicleDetailHTML = function (vehicleData) {
           <p><strong>Description:</strong> ${vehicleData.inv_description}</p>
           <p><strong>Color:</strong> ${vehicleData.inv_color}</p>
           <p><strong>Miles:</strong> ${vehicleData.inv_miles.toLocaleString('en-US')}</p>
+
+          <div style="margin-top: 1rem;">
+            <a href="/service/list/${vehicleData.inv_id}" 
+               style="display:inline-block;padding:.5rem 1rem;background:#003300;
+                      color:#fff;border-radius:4px;text-decoration:none;">
+               🛠 View Service History
+            </a>
+          </div>
         </div>
       </div>
     `;

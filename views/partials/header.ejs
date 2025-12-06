@@ -6,7 +6,7 @@
     </h1>
     <ul class="nav-right">
         <% if (loggedin) { %>
-            <li><a href="/account/manage">Welcome <%= accountData.account_firstname %></a></li>
+            <li><a href="/account/">Welcome <%= accountData.account_firstname %></a></li>
             <li><a href="/account/logout">Logout</a></li>
             <% } else { %>
                 <li><a href="/account/login">My Account</a></li>

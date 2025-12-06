@@ -1,19 +1,3 @@
-<%- include('../partials/header') %>
-<h1><%- title %></h1>
-
-<!-- Flash messages -->
-<%- messages() %>
-
-    <!-- Validation errors -->
-    <% if (errors) { %>
-        <ul class="notice">
-            <% errors.array().forEach(error=> { %>
-                <li>
-                    <%= error.msg %>
-                </li>
-                <% }) %>
-        </ul>
-        <% } %>
     <div class="container">
         <h2>Service history for <%= vehicle.inv_make %>
                 <%= vehicle.inv_model %> (<%= vehicle.inv_year %>)</h2>
@@ -48,7 +32,7 @@
                                     <%= r.description %>
                                 </td>
                                 <td>
-                                    <%= r.cost ? r.cost.toFixed(2) : '' %>
+                                    <%= r.cost !==null && r.cost !=='' ? '$' + Number(r.cost).toFixed(2) : '' %>
                                 </td>
                                 <td>
                                     <%= r.service_center || '' %>

@@ -6,8 +6,7 @@
 
 <body>
     <header>
-        <!-- nav partial include -->
-        <%include('../partials/header')%>
+        <% include('../partials/header') %>
     </header>
 
     <main class="container" role="main">
@@ -21,7 +20,7 @@
                 <div class="vehicle-image">
                     <% const img=vehicle.image_full || vehicle.inv_image || vehicle.image || vehicle.thumbnail || '' ;
                         %>
-                        <img src="<%= img %>" alt="<%= title %>" />
+                        <img src="<%= img %>" alt="<%= vehicle.make %> <%= vehicle.model %>" />
                 </div>
 
                 <div class="vehicle-info">
@@ -66,15 +65,15 @@
                                                         <% } %>
                         </ul>
                     </section>
-                    <p style="margin-top:1rem;">
-                        <a href="/service/list/<%= vehicle.inv_id %>" class="btn btn-outline-primary">
-                            View Service History
-                        </a>
-                    </p>
 
-                    <p style="margin-top:1rem;">
-                        <a href="/inventory">Back to inventory</a>
-                    </p>
+                    <div style="margin-top:1rem;">
+                        <p>
+                            <a href="/inventory">← Back to Inventory</a>
+                        </p>
+                        <p>
+                            <a href="/service/list/<%= vehicle.inv_id %>">🛠 View Service History</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </article>

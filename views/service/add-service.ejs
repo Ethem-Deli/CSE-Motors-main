@@ -1,21 +1,4 @@
 <%- include('../partials/header') %>
-
-<h1><%- title %></h1>
-
-<!-- Flash messages -->
-<%- messages() %>
-
-    <!-- Validation errors -->
-    <% if (errors) { %>
-        <ul class="notice">
-            <% errors.array().forEach(error=> { %>
-                <li>
-                    <%= error.msg %>
-                </li>
-                <% }) %>
-        </ul>
-        <% } %>
-
     <div class="container">
         <h2>Add service record for <%= vehicle.inv_make %>
                 <%= vehicle.inv_model %> (<%= vehicle.inv_year %>)</h2>

@@ -1,5 +1,3 @@
-// This server.js file is the primary file of the application
-
 // the system stuff
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
@@ -18,13 +16,13 @@ const messageRoute = require("./routes/messageRoute.js");
 const intentionalErrorRoute = require("./routes/intentionalErrorRoute.js");
 const utilities = require("./utilities/index.js");
 const pool = require("./database");
-const serviceRoutes = require('./routes/service-routes'); //for Enhancement week 6
 const invModel = require("./models/inventory-model");
+const serviceRoutes = require('./routes/service-routes'); //for Enhancement week 6
 
 // Init
 const app = express();
 
-app.use('/service', serviceRoutes);//for Enhancement week 6
+
 // Sessions/MIDDLEWARE
 app.use(
   session({
@@ -74,6 +72,7 @@ app.use(expressLayouts);
 // layout file
 app.set("layout", "./layouts/layout");
 
+app.use('/service', serviceRoutes);//for Enhancement week 6
 // Routes 
 app.use(static);
 
@@ -135,4 +134,3 @@ const host = process.env.HOST || "localhost"; // local dev
 app.listen(port, host, () => {
   console.log(`App listening on http://${host}:${port}`);
 });
-// psql -h localhost -U edelicse340 -d edelicse340
